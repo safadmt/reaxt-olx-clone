@@ -1,0 +1,56 @@
+.input-search-group{
+    width: 600px !important;
+}
+#hambergar{
+    display: none;
+}
+
+@media only screen and (max-width: 900px) {
+    
+    .nav-items{
+        
+        gap: 3rem !important;
+    }
+    .input-search-group{
+        width: 400px !important;
+    }
+}
+@media only screen and (max-width: 800px) {
+    .nav-container{
+        display: flex;
+        
+    }
+    #hambergar {
+        display: block;
+    }
+    .nav-items{
+        display: none !important;
+        
+    }
+    
+    .nav-item{
+        display: flex;
+        flex-direction: column !important;
+        justify-content: start !important;
+        align-items: start !important;
+    }
+    div.active{
+        display: block !important;
+        position: absolute;
+        top: 67px;
+        width: 100vw;
+        background-color: gray;
+        left: 0px;
+        padding: 20px 100px 20 30px;
+        z-index: 1000;
+    }
+    
+}
+@media only screen and (max-width: 450px) {
+    
+    div.active{
+        padding: 20px 10px
+    }
+    
+}
+
