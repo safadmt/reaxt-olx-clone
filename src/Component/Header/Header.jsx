@@ -1,18 +1,39 @@
 import { Component } from "react";
 import logoimage from "../../Assets/logos/76a0559e38785778f7204968d466a98b.png";
-import { FaSearch } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { IoMenu } from "react-icons/io5";
+import { FaPlus } from "react-icons/fa6";
 import './header.css'
+import { CommonContext } from "../../context/CommonContext";
+import { supabase } from "../../Supabase/supabase";
+import SearchInput from "./SearchInput";
+
+
 class Header extends Component {
-    state = {togglemenu : ""}
-    handleToggle = () => {
-        this.setState({togglemenu: this.state.togglemenu === "active" ? "" : "active"})
+    static contextType = CommonContext;
+   
+    componentDidMount() {
+      supabase.auth.getSession().then(resp=> {
+        if(resp.data.session) {
+          this.setSession(resp.data.session)
+        }
+      })
+      .catch(err=> {
+        console.log(err)
+      })
     }
-    componentDidUpdate(prevProps , prevState) {
-        console.log(this.state.togglemenu)
+    
+    
+    setSession(info) {
+      const {state, dispatch} = this.context
+      dispatch({type:"set_session", payload: info})
     }
+    
   render() {
+    const {state, dispatch} = this.context
+    function handleToggleMenu () {
+      dispatch({type:"side_bar_open", payload: state.isSidebarOpen === "authactive" ? "" : "authactive"})
+    }
     return (
       <div className="nav-bar bg-gray-300 px-5 py-3 fixed top-0 left-0 w-screen box-border">
         <nav className="nav-container flex justify-between pe-8">
@@ -23,28 +44,30 @@ class Header extends Component {
               className="min-w-16 max-w-16 mix-blend-multiply"
             />
           </div>
-          <IoMenu size={25} className="none mt-2 hover:cursor-pointer" id="hambergar" onClick={this.handleToggle}/>
-          <div className={`md:shrink md:flex md:justify-between  gap-60 nav-items ${this.state.togglemenu} `}>
+          <IoMenu size={25} className="none mt-2 hover:cursor-pointer" id="hambergar" onClick={handleToggleMenu}/>
+          <div className={`md:shrink md:flex md:justify-between  gap-60 nav-items ${state.isSidebarOpen}`}>
             <div className="shrink sm:w-full">
-              <div className="input-search-group flex bg-[#092230] w-full rounded border-2 border-[#092230]">
-                <input
-                  className="flex-1  outline-none border-none w-full px-3"
-                  type="text"
-                  placeholder="Search for Cars, Mobiles, Bikes, etc..."
-                />
-                <div
-                  className="w-12 h-12 flex justify-center items-center hover:cursor-pointer"
-                  style={{ maxWidth: "3rem" }}
-                >
-                  <FaSearch color="white" className="" />
-                </div>
-              </div>
+              <SearchInput/>
             </div>
             <div>
               <ul className="nav-item flex justify-center items-center">
-                <li className="mt-2">
-                  <Link className="text-[#092230] underline underline-offset-8 font-bold text-lg">
+                <li className="mt-2 me-4">
+                  <Link className="text-[#092230] underline underline-offset-8 font-bold text-lg"
+                  onClick={()=> {dispatch({type: "auth_bar_open", payload:"active"})}}>
                     Login
+                  </Link>
+                </li>
+                <li>
+                  <Link to={'/post'}>
+                    <div className="bg-white text-gray-950 gap-1 rounded-full flex justify-center items-baseline font-medium px-6 text-center py-2 border-none">
+                      <div>
+                      <FaPlus size={12}/>
+                      </div>
+                      <div>
+                        <button className="">SELL</button>
+
+                      </div>
+                      </div>
                   </Link>
                 </li>
               </ul>

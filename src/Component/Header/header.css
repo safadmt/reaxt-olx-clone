@@ -16,6 +16,9 @@
     }
 }
 @media only screen and (max-width: 800px) {
+    li {
+        margin-bottom: 10px;
+    }
     .nav-container{
         display: flex;
         
@@ -34,7 +37,7 @@
         justify-content: start !important;
         align-items: start !important;
     }
-    div.active{
+    div.authactive{
         display: block !important;
         position: absolute;
         top: 67px;
